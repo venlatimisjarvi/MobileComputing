@@ -1,8 +1,8 @@
-package com.codemave.mobilecomputing.ui.home
+package com.myapp.mobilecomputing.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codemave.mobilecomputing.data.entity.Category
+import com.myapp.mobilecomputing.data.entity.Category
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect

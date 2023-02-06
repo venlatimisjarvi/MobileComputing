@@ -1,5 +1,6 @@
-package com.codemave.mobilecomputing.ui.login
+package com.myapp.mobilecomputing.ui.login
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -18,14 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
+import com.myapp.mobilecomputing.Graph
+import com.myapp.mobilecomputing.data.entity.User
+import com.myapp.mobilecomputing.data.repository.UserRepository
+import com.myapp.mobilecomputing.ui.MainActivity
+import com.myapp.mobilecomputing.ui.register.RegisterViewModel
 
 
 @Composable
 fun Login(
-    navController: NavController
+    navController: NavController,
+    sharedPreferences: SharedPreferences,
 ) {
+
 
     Surface(modifier = Modifier.fillMaxSize()) {
         val username = rememberSaveable { mutableStateOf("") }
@@ -48,7 +57,7 @@ fun Login(
             OutlinedTextField(
                 value = username.value,
                 onValueChange = { data -> username.value = data },
-                label = { Text("Username")},
+                label = { Text("Username") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -58,7 +67,7 @@ fun Login(
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { data -> password.value = data },
-                label = { Text("Password")},
+                label = { Text("Password") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password
@@ -67,7 +76,9 @@ fun Login(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { navController.navigate("home") },
+                onClick = {
+                    checkUser(username.value, password.value, sharedPreferences, navController)
+                },
                 enabled = true,
                 modifier = Modifier.fillMaxWidth().size(55.dp),
                 shape = MaterialTheme.shapes.small
@@ -96,3 +107,17 @@ fun Login(
         }
     }
 }
+    private fun checkUser(username: String, password: String, sharedPreferences: SharedPreferences, navController: NavController ){
+        val correctUsername = sharedPreferences.getString("username", "")
+        val correctPassword = sharedPreferences.getString("password", "")
+
+        if(username.equals(correctUsername) && password.equals(correctPassword)){
+            navController.navigate("home")
+        }
+        /*val user: User? = Graph.userRepository.getUserWithUsername(username)
+        if (user != null){
+            if(user.password == password){
+                navController.navigate("home")
+            }
+        }*/
+    }

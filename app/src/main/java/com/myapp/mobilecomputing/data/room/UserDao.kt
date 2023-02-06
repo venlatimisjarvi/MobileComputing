@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing.data.room
+package com.myapp.mobilecomputing.data.room
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.codemave.mobilecomputing.data.entity.User
+import com.myapp.mobilecomputing.data.entity.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,7 +20,7 @@ abstract class UserDao {
     abstract fun users(): Flow<List<User>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend abstract fun insert(entity: User): Long
+    abstract suspend fun insert(entity: User): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(entities: Collection<User>)

@@ -1,8 +1,8 @@
-package com.codemave.mobilecomputing.ui.home.categoryPayment
+package com.myapp.mobilecomputing.ui.home.categoryPayment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codemave.mobilecomputing.data.entity.Payment
+import com.myapp.mobilecomputing.data.entity.Payment
 import java.util.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

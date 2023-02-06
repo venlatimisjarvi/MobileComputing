@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing.util
+package com.myapp.mobilecomputing.util
 
 
 import androidx.lifecycle.ViewModel

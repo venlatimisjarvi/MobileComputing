@@ -1,12 +1,9 @@
-package com.codemave.mobilecomputing.ui.register
+package com.myapp.mobilecomputing.ui.register
 
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,15 +18,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
-import java.util.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.myapp.mobilecomputing.Graph
+import com.myapp.mobilecomputing.MobileComputingApplication
+import com.myapp.mobilecomputing.data.entity.User
+import com.myapp.mobilecomputing.util.viewModelProviderFactoryOf
 
 
 @Composable
 fun Register(
     onBackPress: () -> Unit,
     navController: NavController,
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: RegisterViewModel = viewModel(factory = viewModelProviderFactoryOf { RegisterViewModel() })
+
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -95,7 +96,7 @@ fun Register(
                 onClick = {
                     coroutineScope.launch {
                         viewModel.saveUser(
-                            com.codemave.mobilecomputing.data.entity.User(
+                            User(
                                 username = username.value,
                                 password = password.value,
 

@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing.data.entity
+package com.myapp.mobilecomputing.data.entity
 
 import java.util.*
 

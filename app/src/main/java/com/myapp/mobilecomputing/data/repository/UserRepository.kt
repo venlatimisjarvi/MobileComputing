@@ -1,8 +1,7 @@
-package com.codemave.mobilecomputing.data.repository
+package com.myapp.mobilecomputing.data.repository
 
-import com.codemave.mobilecomputing.data.entity.Category
-import com.codemave.mobilecomputing.data.entity.User
-import com.codemave.mobilecomputing.data.room.UserDao
+import com.myapp.mobilecomputing.data.entity.User
+import com.myapp.mobilecomputing.data.room.UserDao
 import kotlinx.coroutines.flow.Flow
 
 /**

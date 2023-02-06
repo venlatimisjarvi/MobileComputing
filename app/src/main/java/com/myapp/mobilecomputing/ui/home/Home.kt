@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing.ui.home
+package com.myapp.mobilecomputing.ui.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codemave.mobilecomputing.R
-import com.codemave.mobilecomputing.data.entity.Category
-import com.codemave.mobilecomputing.ui.home.categoryPayment.CategoryPayment
+import com.myapp.mobilecomputing.data.entity.Category
+import com.myapp.mobilecomputing.ui.home.categoryPayment.CategoryPayment
 import com.google.accompanist.insets.systemBarsPadding
 import androidx.compose.material.icons.filled.*
 

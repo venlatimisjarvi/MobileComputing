@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing
+package com.myapp.mobilecomputing
 
 
 import android.app.Application

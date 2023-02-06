@@ -1,20 +1,18 @@
-package com.codemave.mobilecomputing.ui
+package com.myapp.mobilecomputing.ui
 
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.codemave.mobilecomputing.ui.MobileComputingAppState
-import com.codemave.mobilecomputing.ui.rememberMobileComputingAppState
-import com.codemave.mobilecomputing.ui.home.Home
-import com.codemave.mobilecomputing.ui.login.Login
-import com.codemave.mobilecomputing.ui.payment.Payment
-import com.codemave.mobilecomputing.ui.profile.Profile
-import android.content.SharedPreferences
-import com.codemave.mobilecomputing.ui.register.Register
+import com.myapp.mobilecomputing.ui.home.Home
+import com.myapp.mobilecomputing.ui.login.Login
+import com.myapp.mobilecomputing.ui.payment.Payment
+import com.myapp.mobilecomputing.ui.profile.Profile
+import com.myapp.mobilecomputing.ui.register.Register
 
 @Composable
 fun MobileComputingApp(
+    sharedPreferences: SharedPreferences,
     appState: MobileComputingAppState = rememberMobileComputingAppState()
 ) {
     NavHost(
@@ -22,7 +20,8 @@ fun MobileComputingApp(
         startDestination = "login"
     ) {
         composable(route = "login") {
-            Login(navController = appState.navController)
+            Login(navController = appState.navController,
+            sharedPreferences)
         }
         composable(route = "register") {
             Register(onBackPress = appState::navigateBack,

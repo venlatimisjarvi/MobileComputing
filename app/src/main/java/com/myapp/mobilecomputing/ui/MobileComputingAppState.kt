@@ -1,8 +1,7 @@
-package com.codemave.mobilecomputing.ui
+package com.myapp.mobilecomputing.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 

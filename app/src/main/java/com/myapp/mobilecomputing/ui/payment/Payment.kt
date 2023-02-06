@@ -1,4 +1,4 @@
-package com.codemave.mobilecomputing.ui.payment
+package com.myapp.mobilecomputing.ui.payment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

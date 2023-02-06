@@ -1,10 +1,9 @@
-package com.codemave.mobilecomputing.ui.home.categoryPayment
+package com.myapp.mobilecomputing.ui.home.categoryPayment
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codemave.mobilecomputing.R
-import com.codemave.mobilecomputing.data.entity.Payment
+import com.myapp.mobilecomputing.data.entity.Payment
 import java.text.SimpleDateFormat
 import java.util.*
 

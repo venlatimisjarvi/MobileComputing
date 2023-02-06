@@ -1,10 +1,11 @@
-package com.codemave.mobilecomputing
+package com.myapp.mobilecomputing
 
 
 import android.content.Context
+import androidx.room.DatabaseConfiguration
 import androidx.room.Room
-import com.codemave.mobilecomputing.data.repository.UserRepository
-import com.codemave.mobilecomputing.data.room.MobileComputingDatabase
+import com.myapp.mobilecomputing.data.repository.UserRepository
+import com.myapp.mobilecomputing.data.room.MobileComputingDatabase
 
 /**
  * A simple singleton dependency graph
@@ -17,15 +18,17 @@ object Graph {
     lateinit var appContext: Context
 
     val userRepository by lazy {
-        UserRepository(
-            userDao = database.userDao()
-        )
+
+            UserRepository(
+                userDao = database.userDao()
+            )
+
     }
 
 
     fun provide(context: Context) {
-        appContext = context
-        database = Room.databaseBuilder(context, MobileComputingDatabase::class.java, "mcData.db")
+        this.appContext = context
+        this.database = Room.databaseBuilder(context, MobileComputingDatabase::class.java, "mcData.db")
             .fallbackToDestructiveMigration() // don't use this in production app
             .build()
     }
