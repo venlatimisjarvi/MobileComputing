@@ -31,7 +31,7 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codemave.mobilecomputing.R
 import com.myapp.mobilecomputing.data.entity.Category
-import com.myapp.mobilecomputing.ui.home.categoryPayment.CategoryPayment
+import com.myapp.mobilecomputing.ui.home.homeReminder.CategoryPayment
 import com.google.accompanist.insets.systemBarsPadding
 import androidx.compose.material.icons.filled.*
 

@@ -4,6 +4,7 @@ package com.myapp.mobilecomputing
 import android.content.Context
 import androidx.room.DatabaseConfiguration
 import androidx.room.Room
+import com.myapp.mobilecomputing.data.repository.ReminderRepository
 import com.myapp.mobilecomputing.data.repository.UserRepository
 import com.myapp.mobilecomputing.data.room.MobileComputingDatabase
 
@@ -22,6 +23,14 @@ object Graph {
             UserRepository(
                 userDao = database.userDao()
             )
+
+    }
+
+    val reminderRepository by lazy {
+
+        ReminderRepository(
+            reminderDao = database.reminderDao()
+        )
 
     }
 

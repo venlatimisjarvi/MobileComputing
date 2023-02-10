@@ -1,8 +1,8 @@
-package com.myapp.mobilecomputing.ui.home.categoryPayment
+package com.myapp.mobilecomputing.ui.home.homeReminder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myapp.mobilecomputing.data.entity.Payment
+import com.myapp.mobilecomputing.data.entity.Reminder
 import java.util.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,10 +15,10 @@ class CategoryPaymentViewModel : ViewModel() {
         get() = _state
 
     init {
-        val list = mutableListOf<Payment>()
+        val list = mutableListOf<Reminder>()
         for (x in 1..20) {
             list.add(
-                Payment(
+                Reminder(
                     paymentId = x.toLong(),
                     paymentTitle = "$x reminder",
                     paymentCategory = "Work",
@@ -29,12 +29,12 @@ class CategoryPaymentViewModel : ViewModel() {
 
         viewModelScope.launch {
             _state.value = CategoryPaymentViewState(
-                payments = list
+                reminders = list
             )
         }
     }
 }
 
 data class CategoryPaymentViewState(
-    val payments: List<Payment> = emptyList()
+    val reminders: List<Reminder> = emptyList()
 )

@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.myapp.mobilecomputing.ui.home.Home
 import com.myapp.mobilecomputing.ui.login.Login
-import com.myapp.mobilecomputing.ui.payment.Payment
+import com.myapp.mobilecomputing.ui.reminder.Payment
 import com.myapp.mobilecomputing.ui.profile.Profile
 import com.myapp.mobilecomputing.ui.register.Register
 

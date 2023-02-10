@@ -1,4 +1,4 @@
-package com.myapp.mobilecomputing.ui.home.categoryPayment
+package com.myapp.mobilecomputing.ui.home.homeReminder
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codemave.mobilecomputing.R
-import com.myapp.mobilecomputing.data.entity.Payment
+import com.myapp.mobilecomputing.data.entity.Reminder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,14 +39,14 @@ fun CategoryPayment(
 
     Column(modifier = modifier) {
         PaymentList(
-            list = viewState.payments
+            list = viewState.reminders
         )
     }
 }
 
 @Composable
 private fun PaymentList(
-    list: List<Payment>
+    list: List<Reminder>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
@@ -54,7 +54,7 @@ private fun PaymentList(
     ) {
         items(list) { item ->
             PaymentListItem(
-                payment = item,
+                reminder = item,
                 onClick = {},
                 modifier = Modifier.fillParentMaxWidth(),
             )
@@ -64,7 +64,7 @@ private fun PaymentList(
 
 @Composable
 private fun PaymentListItem(
-    payment: Payment,
+    reminder: Reminder,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -80,7 +80,7 @@ private fun PaymentListItem(
 
         // title
         Text(
-            text = payment.paymentTitle,
+            text = reminder.paymentTitle,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(paymentTitle) {
@@ -98,7 +98,7 @@ private fun PaymentListItem(
 
         // category
         Text(
-            text = payment.paymentCategory,
+            text = reminder.paymentCategory,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.constrainAs(paymentCategory) {
@@ -118,7 +118,7 @@ private fun PaymentListItem(
         // date
         Text(
             text = when {
-                payment.paymentDate != null -> { payment.paymentDate.formatToString() }
+                reminder.paymentDate != null -> { reminder.paymentDate.formatToString() }
                 else -> Date().formatToString()
             },
             maxLines = 1,
