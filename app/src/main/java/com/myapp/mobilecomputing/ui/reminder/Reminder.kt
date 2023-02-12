@@ -24,7 +24,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.google.android.gms.maps.model.LatLng
-
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 
 @Composable
@@ -36,13 +39,16 @@ fun Reminder(
     Surface {
         val coroutineScope = rememberCoroutineScope()
         val message = rememberSaveable { mutableStateOf("") }
-        val reminderTime = rememberSaveable { mutableStateOf("") }
+        val date = rememberSaveable { mutableStateOf("") }
+        val time = rememberSaveable { mutableStateOf("") }
 
         val latlng = navController
             .currentBackStackEntry
             ?.savedStateHandle
             ?.getLiveData<LatLng>("location_data")
             ?.value
+
+         val formatter : SimpleDateFormat = SimpleDateFormat("dd.mm.yyyy HH:mm")
 
         Column(
             modifier = Modifier
@@ -66,23 +72,23 @@ fun Reminder(
                 modifier = Modifier.padding(16.dp)
             ) {
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    label = { Text(text = "Reminder title")},
+                    value = message.value,
+                    onValueChange = {message.value = it},
+                    label = { Text(text = "Reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row{
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = { Text(text = "Date")},
+                        value = date.value,
+                        onValueChange = {date.value = it},
+                        label = { Text(text = "Date (dd.mm.yyyy)")},
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = { Text(text = "Time")},
+                        value = time.value,
+                        onValueChange = {time.value = it},
+                        label = { Text(text = "Time (hh:mm)")},
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
@@ -101,7 +107,22 @@ fun Reminder(
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.saveReminder(
+                                com.myapp.mobilecomputing.data.entity.Reminder(
+                                    message = message.value,
+                                    locationX = latlng?.latitude,
+                                    locationY = latlng?.longitude,
+                                    reminderTime = formatter.parse(date.value + " " + time.value).time,
+                                    creationTime = Date().time,
+                                    creatorId = 1,
+                                    reminderSeen = false
+                                )
+                            )
+                        }
+                        onBackPress()
+                    },
                     modifier = Modifier.fillMaxWidth().size(55.dp)
                 ) {
                     Text("Save reminder")

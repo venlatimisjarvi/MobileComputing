@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.codemave.mobilecomputing">
+    package="com.myapp.mobilecomputing">
 
     <application
+        android:name=".MobileComputingApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +15,7 @@
             android:value="AIzaSyBqe8SYllHrScef4hxG7UWRi5v4KkObrfY" />
 
         <activity
-            android:name="com.myapp.mobilecomputing.ui.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MobileComputing.NoActionBar">

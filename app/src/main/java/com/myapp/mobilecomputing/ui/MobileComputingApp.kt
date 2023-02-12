@@ -6,7 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.myapp.mobilecomputing.ui.home.Home
 import com.myapp.mobilecomputing.ui.login.Login
-import com.myapp.mobilecomputing.ui.reminder.Payment
+import com.myapp.mobilecomputing.ui.maps.ReminderLocationMap
+import com.myapp.mobilecomputing.ui.reminder.Reminder
 import com.myapp.mobilecomputing.ui.profile.Profile
 import com.myapp.mobilecomputing.ui.register.Register
 
@@ -32,12 +33,16 @@ fun MobileComputingApp(
                 navController = appState.navController
             )
         }
-        composable(route = "payment") {
-            Payment(onBackPress = appState::navigateBack)
+        composable(route = "reminder") {
+            Reminder(onBackPress = appState::navigateBack,
+            navController = appState.navController)
         }
         composable(route = "profile") {
             Profile(onBackPress = appState::navigateBack,
                 navController = appState.navController)
+        }
+        composable(route = "map") {
+            ReminderLocationMap(navController = appState.navController)
         }
     }
 }

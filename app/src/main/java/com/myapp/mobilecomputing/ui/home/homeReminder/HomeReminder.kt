@@ -15,6 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,21 +32,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun CategoryPayment(
+fun HomeReminder(
     modifier: Modifier = Modifier
 ) {
-    val viewModel: CategoryPaymentViewModel = viewModel()
+    val viewModel: HomeReminderViewModel = viewModel()
     val viewState by viewModel.state.collectAsState()
 
     Column(modifier = modifier) {
-        PaymentList(
+        ReminderList(
             list = viewState.reminders
         )
     }
 }
 
 @Composable
-private fun PaymentList(
+private fun ReminderList(
     list: List<Reminder>
 ) {
     LazyColumn(
@@ -53,7 +54,7 @@ private fun PaymentList(
         verticalArrangement = Arrangement.Center
     ) {
         items(list) { item ->
-            PaymentListItem(
+            ReminderListItem(
                 reminder = item,
                 onClick = {},
                 modifier = Modifier.fillParentMaxWidth(),
@@ -63,13 +64,13 @@ private fun PaymentList(
 }
 
 @Composable
-private fun PaymentListItem(
+private fun ReminderListItem(
     reminder: Reminder,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, paymentTitle, paymentCategory, icon, date) = createRefs()
+        val (divider, message, paymentCategory, icon, date) = createRefs()
         Divider(
             Modifier.constrainAs(divider) {
                 top.linkTo(parent.top)
@@ -78,12 +79,12 @@ private fun PaymentListItem(
             }
         )
 
-        // title
+        // message
         Text(
-            text = reminder.paymentTitle,
+            text = reminder.message,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(paymentTitle) {
+            modifier = Modifier.constrainAs(message) {
                 linkTo(
                     start = parent.start,
                     end = icon.start,
@@ -97,7 +98,7 @@ private fun PaymentListItem(
         )
 
         // category
-        Text(
+        /*Text(
             text = reminder.paymentCategory,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle2,
@@ -109,31 +110,31 @@ private fun PaymentListItem(
                     endMargin = 8.dp,
                     bias = 0f // float this towards the start. this was is the fix we needed
                 )
-                top.linkTo(paymentTitle.bottom, margin = 6.dp)
+                top.linkTo(message.bottom, margin = 6.dp)
                 bottom.linkTo(parent.bottom, 10.dp)
                 width = Dimension.preferredWrapContent
             }
-        )
+        )*/
 
         // date
         Text(
             text = when {
-                reminder.paymentDate != null -> { reminder.paymentDate.formatToString() }
-                else -> Date().formatToString()
+                reminder.reminderTime != null -> { reminder.reminderTime.toDateString() }
+                else -> "No time set for the reminder"
             },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.constrainAs(date) {
                 linkTo(
-                    start = paymentCategory.end,
+                    start = parent.start,
                     end = icon.start,
-                    startMargin = 8.dp,
+                    startMargin = 24.dp,
                     endMargin = 16.dp,
                     bias = 0f // float this towards the start. this was is the fix we needed
                 )
-                centerVerticallyTo(paymentCategory)
-                top.linkTo(paymentTitle.bottom, 6.dp)
+                //centerVerticallyTo(paymentCategory)
+                top.linkTo(message.bottom, 6.dp)
                 bottom.linkTo(parent.bottom, 10.dp)
             }
         )
@@ -151,8 +152,8 @@ private fun PaymentListItem(
                 }
         ) {
             Icon(
-                imageVector = Icons.Filled.Check,
-                contentDescription = stringResource(R.string.check_mark)
+                imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(R.string.delete)
             )
         }
     }
@@ -160,4 +161,8 @@ private fun PaymentListItem(
 
 private fun Date.formatToString(): String {
     return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
+}
+fun Long.toDateString(): String {
+    return SimpleDateFormat("dd.mm.yyyy HH:mm", Locale.getDefault()).format(Date(this))
+
 }

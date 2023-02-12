@@ -31,9 +31,9 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codemave.mobilecomputing.R
 import com.myapp.mobilecomputing.data.entity.Category
-import com.myapp.mobilecomputing.ui.home.homeReminder.CategoryPayment
 import com.google.accompanist.insets.systemBarsPadding
 import androidx.compose.material.icons.filled.*
+import com.myapp.mobilecomputing.ui.home.homeReminder.HomeReminder
 
 
 @Composable
@@ -92,13 +92,13 @@ fun HomeContent(
                 backgroundColor = appBarColor,
             )
 
-            CategoryTabs(
+            /*CategoryTabs(
                 categories = categories,
                 selectedCategory = selectedCategory,
                 onCategorySelected = onCategorySelected,
-            )
+            )*/
 
-            CategoryPayment(
+            HomeReminder(
                 modifier = Modifier.fillMaxSize()
             )
         }

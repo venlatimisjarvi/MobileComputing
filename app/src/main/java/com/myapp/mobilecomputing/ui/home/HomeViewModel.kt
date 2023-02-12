@@ -35,7 +35,7 @@ class HomeViewModel : ViewModel() {
         )
 
         viewModelScope.launch {
-            combine(
+            /*combine(
                 categories.onEach { category ->
                     if (categories.value.isNotEmpty() && _selectedCategory.value == null) {
                         _selectedCategory.value = category[0]
@@ -48,7 +48,7 @@ class HomeViewModel : ViewModel() {
                     selectedCategory = selectedCategory
                 )
             }.collect { _state.value = it }
-        }
+        */}
     }
 }
 
