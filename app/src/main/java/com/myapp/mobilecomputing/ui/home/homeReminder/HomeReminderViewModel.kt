@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeReminderViewModel(
@@ -19,12 +20,18 @@ class HomeReminderViewModel(
     val state: StateFlow<HomeReminderViewState>
         get() = _state
 
+    suspend fun deleteReminder(reminder: Reminder): Int {
+        return reminderRepository.deleteReminder(reminder)
+    }
+
     init {
         viewModelScope.launch {
+                    reminderRepository.remindersForCreator(1).collect { list ->
+                        _state.value = HomeReminderViewState(
+                            reminders = list
+                        )
+                    }
 
-                _state.value = HomeReminderViewState(
-                    reminders = reminderRepository.remindersForCreator(1)
-                )
 
         }
     }

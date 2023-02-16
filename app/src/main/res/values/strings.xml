@@ -4,5 +4,6 @@
     <string name="account">Account</string>
     <string name="check_mark">Check</string>
     <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 
 </resources>

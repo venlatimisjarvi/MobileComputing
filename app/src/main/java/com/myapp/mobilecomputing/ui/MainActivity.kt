@@ -18,9 +18,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*if(!Graph.database.isOpen) {
+        if(!Graph.database.isOpen) {
             Graph.provide(this)
-        }*/
+        }
         setContent {
             sharedPreferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()

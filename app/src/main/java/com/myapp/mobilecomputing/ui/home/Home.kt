@@ -29,47 +29,49 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.codemave.mobilecomputing.R
+import com.myapp.mobilecomputing.R
 import com.myapp.mobilecomputing.data.entity.Category
 import com.google.accompanist.insets.systemBarsPadding
 import androidx.compose.material.icons.filled.*
 import com.myapp.mobilecomputing.ui.home.homeReminder.HomeReminder
+import com.myapp.mobilecomputing.ui.home.homeReminder.HomeReminderViewModel
+import com.myapp.mobilecomputing.ui.reminder.ReminderViewModel
 
 
 @Composable
 fun Home(
-    viewModel: HomeViewModel = viewModel(),
+    //viewModel: HomeViewModel = viewModel(),
     navController: NavController
 ) {
-    val viewState by viewModel.state.collectAsState()
+    //val viewState by viewModel.state.collectAsState()
 
-    val selectedCategory = viewState.selectedCategory
+    //val selectedCategory = viewState.selectedCategory
 
-    if (viewState.categories.isNotEmpty() && selectedCategory != null) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            HomeContent(
-                selectedCategory = selectedCategory,
-                categories = viewState.categories,
-                onCategorySelected = viewModel::onCategorySelected,
-                navController = navController
-            )
-        }
+
+    Surface(modifier = Modifier.fillMaxSize()) {
+        HomeContent(
+            //selectedCategory = selectedCategory,
+            //categories = viewState.categories,
+            //onCategorySelected = viewModel::onCategorySelected,
+            navController = navController
+        )
     }
+
 }
 
 
 @Composable
 fun HomeContent(
-    selectedCategory: Category,
-    categories: List<Category>,
-    onCategorySelected: (Category) -> Unit,
+    //selectedCategory: Category,
+    //categories: List<Category>,
+    //onCategorySelected: (Category) -> Unit,
     navController: NavController,
 ) {
     Scaffold(
         modifier = Modifier.padding(bottom = 24.dp),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(route = "payment") },
+                onClick = { navController.navigate(route = "reminder") },
                 contentColor = Color.Blue,
                 modifier = Modifier.padding(all = 20.dp)
             ) {
@@ -99,7 +101,8 @@ fun HomeContent(
             )*/
 
             HomeReminder(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                navController = navController
             )
         }
     }

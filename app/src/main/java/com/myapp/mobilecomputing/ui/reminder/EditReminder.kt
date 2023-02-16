@@ -1,5 +1,7 @@
 package com.myapp.mobilecomputing.ui.reminder
 
+
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.google.android.gms.maps.model.LatLng
+import com.myapp.mobilecomputing.data.entity.Reminder
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -31,16 +34,20 @@ import java.util.*
 
 
 @Composable
-fun Reminder(
+fun EditReminder(
+    reminderId: Long,
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel(),
     navController: NavController
 ) {
+
     Surface {
         val coroutineScope = rememberCoroutineScope()
         val message = rememberSaveable { mutableStateOf("") }
         val date = rememberSaveable { mutableStateOf("") }
         val time = rememberSaveable { mutableStateOf("") }
+
+        val reminder : Reminder? = viewModel.getReminder(reminderId)
 
         val latlng = navController
             .currentBackStackEntry
@@ -48,7 +55,7 @@ fun Reminder(
             ?.getLiveData<LatLng>("location_data")
             ?.value
 
-         val formatter : SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+        val formatter : SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
 
         Column(
             modifier = Modifier
@@ -64,7 +71,7 @@ fun Reminder(
                         contentDescription = null
                     )
                 }
-                Text(text = "Reminder")
+                Text(text = "Edit reminder")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,19 +86,29 @@ fun Reminder(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                    OutlinedTextField(
-                        value = date.value,
-                        onValueChange = { date.value = it },
-                        label = { Text(text = "Date (dd.mm.yyyy)") },
-                        modifier = Modifier.width(180.dp)
-                    )
+                    if (reminder != null) {
+                        OutlinedTextField(
+                            value = when {
+                                reminder.reminderTime != null -> { reminder.reminderTime.toDateString() }
+                                else -> date.value
+                            },
+                            onValueChange = { date.value = it },
+                            label = { Text(text = "Date (dd.mm.yyyy)") },
+                            modifier = Modifier.width(180.dp)
+                        )
+                    }
                     Spacer(modifier = Modifier.width(10.dp))
-                    OutlinedTextField(
-                        value = time.value,
-                        onValueChange = { time.value = it },
-                        label = { Text(text = "Time (hh:mm)") },
-                        modifier = Modifier.width(180.dp)
-                    )
+                    if (reminder != null) {
+                        OutlinedTextField(
+                            value = when {
+                                reminder.reminderTime != null -> { reminder.reminderTime.toTimeString() }
+                                else -> time.value
+                            },
+                            onValueChange = { time.value = it },
+                            label = { Text(text = "Time (hh:mm)") },
+                            modifier = Modifier.width(180.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -112,25 +129,41 @@ fun Reminder(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.saveReminder(
-                                com.myapp.mobilecomputing.data.entity.Reminder(
-                                    message = message.value,
-                                    locationX = latlng?.latitude,
-                                    locationY = latlng?.longitude,
-                                    reminderTime = formatter.parse(date.value + " " + time.value).time,
-                                    creationTime = Date().time,
-                                    creatorId = 1,
-                                    reminderSeen = false
+                            if (reminder != null) {
+                                viewModel.updateReminder(
+                                    com.myapp.mobilecomputing.data.entity.Reminder(
+                                        reminderId = reminder.reminderId,
+                                        message = message.value,
+                                        locationX = when{
+                                            latlng?.latitude != null -> {latlng?.latitude}
+                                            else -> reminder.locationX},
+                                        locationY = when{
+                                            latlng?.longitude != null -> {latlng?.latitude}
+                                            else -> reminder.locationY},
+                                        reminderTime = formatter.parse(date.value + " " + time.value).time,
+                                        creationTime = Date().time,
+                                        creatorId = 1,
+                                        reminderSeen = false
+                                                )
+
                                 )
-                            )
+                            }
                         }
                         onBackPress()
                     },
                     modifier = Modifier.fillMaxWidth().size(55.dp)
                 ) {
-                    Text("Save reminder")
+                    Text("Update reminder")
                 }
             }
         }
     }
+}
+fun Long.toDateString(): String {
+    return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(this))
+
+}
+fun Long.toTimeString(): String {
+    return SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(this))
+
 }
