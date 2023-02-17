@@ -20,7 +20,7 @@ abstract class ReminderDao {
     abstract fun remindersForCreator(creatorId: Long): Flow<List<Reminder>>
 
     @Query("""SELECT * FROM reminders WHERE id = :reminderId""")
-    abstract fun reminder(reminderId: Long): Reminder?
+    abstract suspend fun reminder(reminderId: Long): Reminder?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(entity: Reminder): Long

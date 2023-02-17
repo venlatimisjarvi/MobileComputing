@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,17 @@ fun Profile(
                 navController = navController,
                 backgroundColor = appBarColor,
             )
+            TopAppBar() {
+                IconButton(
+                    onClick = onBackPress
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+                Text(text = "Profile")
+            }
             Spacer(modifier = Modifier.height(50.dp))
             Icon(
                 imageVector = Icons.Default.AccountCircle,

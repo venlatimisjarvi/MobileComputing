@@ -4,6 +4,8 @@ package com.myapp.mobilecomputing.ui.register
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,12 +43,12 @@ fun Register(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .systemBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
-            /*TopAppBar {
+
+            TopAppBar() {
                 IconButton(
                     onClick = onBackPress
                 ) {
@@ -55,7 +57,9 @@ fun Register(
                         contentDescription = null
                     )
                 }
-            }*/
+                Text(text = "Register")
+            }
+            Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Create an account",
                 fontSize = 30.sp,
@@ -75,23 +79,25 @@ fun Register(
                 value = username.value,
                 onValueChange = { data -> username.value = data },
                 label = { Text("Username")},
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(6.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
                 )
             )
-            Spacer(modifier = Modifier.height(10.dp))
+
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { data -> password.value = data },
                 label = { Text("Password")},
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(6.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password
                 ),
                 visualTransformation = PasswordVisualTransformation()
             )
-            Spacer(modifier = Modifier.height(20.dp))
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             Button(
                 onClick = {
                     coroutineScope.launch {
@@ -109,7 +115,8 @@ fun Register(
                 enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(55.dp),
+                    .size(70.dp)
+                    .padding(6.dp),
                 shape = MaterialTheme.shapes.small
             ) {
                 Text(text = "Register")

@@ -17,7 +17,7 @@ class ReminderRepository(
     fun remindersForCreator(creatorId: Long) : Flow<List<Reminder>> {
         return reminderDao.remindersForCreator(creatorId)
     }
-    fun reminder(reminderId : Long) : Reminder?{
+    suspend fun reminder(reminderId : Long) : Reminder?{
         return reminderDao.reminder(reminderId)
     }
 

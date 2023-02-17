@@ -28,7 +28,7 @@ class ReminderViewModel(
         return reminderRepository.updateReminder(reminder)
     }
 
-    fun getReminder(reminderId : Long) : Reminder?{
+    suspend fun getReminder(reminderId : Long) : Reminder?{
         return reminderRepository.reminder(reminderId)
     }
     init {
