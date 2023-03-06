@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class ReminderDao {
     @Query("""
-        SELECT reminders.* FROM reminders
+        SELECT * FROM reminders
         WHERE creator_id = :creatorId
     """)
     abstract fun remindersForCreator(creatorId: Long): Flow<List<Reminder>>

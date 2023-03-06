@@ -1,5 +1,9 @@
 package com.myapp.mobilecomputing.ui.reminder
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.graphics.Color
+import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,11 +27,16 @@ import com.google.accompanist.insets.systemBarsPadding
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.model.LatLng
+import com.myapp.mobilecomputing.Graph
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
+import java.util.Calendar.*
 
 
 @Composable
@@ -38,9 +47,38 @@ fun Reminder(
 ) {
     Surface {
         val coroutineScope = rememberCoroutineScope()
+
+        val mCalendar = Calendar.getInstance()
+
+        val mYear = mCalendar.get(YEAR)
+        val mMonth = mCalendar.get(MONTH)
+        val mDay = mCalendar.get(DAY_OF_MONTH)
+        val mHour = mCalendar[HOUR_OF_DAY]
+        val mMinute = mCalendar[MINUTE]
+
+        mCalendar.time = Date()
+
+        val calendar = rememberSaveable {(Calendar.getInstance())}
+        val mTime = rememberSaveable { mutableStateOf("") }
+        val mDate = rememberSaveable { mutableStateOf("") }
         val message = rememberSaveable { mutableStateOf("") }
-        val date = rememberSaveable { mutableStateOf("") }
-        val time = rememberSaveable { mutableStateOf("") }
+
+        val mDatePickerDialog = DatePickerDialog(
+            Graph.appContext,
+            { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+                mDate.value = "$mDayOfMonth/${mMonth+1}/$mYear"
+                calendar.set(mYear, mMonth, mDayOfMonth)
+            }, mYear, mMonth, mDay
+        )
+        val mTimePickerDialog = TimePickerDialog(
+            Graph.appContext,
+            {_, mHour : Int, mMinute: Int ->
+                calendar.set(HOUR_OF_DAY, mHour)
+                calendar.set(MINUTE, mMinute)
+                mTime.value = "$mHour:$mMinute"
+            }, mHour, mMinute, false
+        )
+
 
         val latlng = navController
             .currentBackStackEntry
@@ -48,7 +86,7 @@ fun Reminder(
             ?.getLiveData<LatLng>("location_data")
             ?.value
 
-         val formatter : SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm")
 
         Column(
             modifier = Modifier
@@ -78,7 +116,41 @@ fun Reminder(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+
+
+                Button(
+                    onClick = {
+                        mDatePickerDialog.show()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary.copy(0.6f)),
+                    modifier = Modifier.height(55.dp)
+                ) {
+                    Text("Open Date Picker", color = MaterialTheme.colors.onPrimary)
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Selected Date: ${mDate.value}",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+
+                Button(
+                    onClick = { mTimePickerDialog.show() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary.copy(0.6f)),
+                    modifier = Modifier.height(55.dp)
+                ) {
+                    Text(text = "Open Time Picker", color = MaterialTheme.colors.onPrimary)
+                }
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                    Text(text = "Selected Time: ${mTime.value}", fontSize = 13.sp)
+
+                /*Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                     OutlinedTextField(
                         value = date.value,
                         onValueChange = { date.value = it },
@@ -92,7 +164,7 @@ fun Reminder(
                         label = { Text(text = "Time (hh:mm)") },
                         modifier = Modifier.width(180.dp)
                     )
-                }
+                }*/
 
                 Spacer(modifier = Modifier.height(20.dp))
                 if (latlng == null) {
@@ -117,7 +189,8 @@ fun Reminder(
                                     message = message.value,
                                     locationX = latlng?.latitude,
                                     locationY = latlng?.longitude,
-                                    reminderTime = formatter.parse(date.value + " " + time.value).time,
+                                    reminderTime = calendar.timeInMillis,
+                                    //formatter.parse(mDate.value + " " + mTime.value).time,
                                     creationTime = Date().time,
                                     creatorId = 1,
                                     reminderSeen = false
@@ -134,3 +207,4 @@ fun Reminder(
         }
     }
 }
+

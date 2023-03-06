@@ -141,7 +141,7 @@ private fun ReminderListItem(
         // date
         Text(
             text = when {
-                reminder.reminderTime != null -> { reminder.reminderTime.toDateString() }
+                reminder.reminderTime != null -> { longToDateString(reminder.reminderTime)}
                 else -> "No time set for the reminder"
             },
             maxLines = 1,
@@ -160,6 +160,7 @@ private fun ReminderListItem(
                 bottom.linkTo(parent.bottom, 10.dp)
             }
         )
+        Text(reminder.reminderSeen.toString())
         // Edit icon
         IconButton(
             onClick = {
@@ -206,10 +207,10 @@ private fun ReminderListItem(
     }
 }
 
-private fun Date.formatToString(): String {
-    return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
-}
-fun Long.toDateString(): String {
-    return SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Date(this))
+
+
+fun longToDateString(time : Long): String {
+    val date = Date(time)
+    return SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(date)
 
 }

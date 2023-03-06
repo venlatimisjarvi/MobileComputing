@@ -2,6 +2,9 @@ package com.myapp.mobilecomputing.ui.reminder
 
 
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +28,10 @@ import com.google.accompanist.insets.systemBarsPadding
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.model.LatLng
+import com.myapp.mobilecomputing.Graph
 import com.myapp.mobilecomputing.data.entity.Reminder
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -50,17 +56,42 @@ fun EditReminder(
         val reminder : Reminder = getReminder(reminderId)
 
         val coroutineScope = rememberCoroutineScope()
+
+        val calendar = Calendar.getInstance()
+
+        if(reminder.reminderTime != null){
+            calendar.timeInMillis = reminder.reminderTime
+        }else{
+            calendar.time = Date()
+        }
+
+        val mYear = calendar.get(Calendar.YEAR)
+        val mMonth = calendar.get(Calendar.MONTH)
+        val mDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val mHour = calendar[Calendar.HOUR_OF_DAY]
+        val mMinute = calendar[Calendar.MINUTE]
+
+        val mCalendar = rememberSaveable{Calendar.getInstance()}
         val message = rememberSaveable { mutableStateOf(reminder.message) }
-        val date = when {
-            reminder.reminderTime != null -> { rememberSaveable { mutableStateOf(reminder.reminderTime.toDateString()) } }
-            else -> rememberSaveable { mutableStateOf("") }
-        }
-        val time = when {
-            reminder.reminderTime != null -> { rememberSaveable { mutableStateOf(reminder.reminderTime.toTimeString()) } }
-            else -> rememberSaveable { mutableStateOf("") }
-        }
+        val date = rememberSaveable { mutableStateOf("") }
+        val time = rememberSaveable { mutableStateOf("") }
 
 
+        val mDatePickerDialog = DatePickerDialog(
+            Graph.appContext,
+            { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+                date.value = "$dayOfMonth/${month+1}/$year"
+                mCalendar.set(year, month, dayOfMonth)
+            }, mYear, mMonth, mDay
+        )
+        val mTimePickerDialog = TimePickerDialog(
+            Graph.appContext,
+            {_, mHour : Int, mMinute: Int ->
+                mCalendar.set(Calendar.HOUR_OF_DAY, mHour)
+                mCalendar.set(Calendar.MINUTE, mMinute)
+                time.value = "$mHour:$mMinute"
+            }, mHour, mMinute, false
+        )
 
 
         val latlng = navController
@@ -109,7 +140,41 @@ fun EditReminder(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+
+
+                Button(
+                    onClick = {
+                        mDatePickerDialog.show()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary.copy(0.6f)),
+                    modifier = Modifier.height(55.dp)
+                ) {
+                    Text("Open Date Picker", color = MaterialTheme.colors.onPrimary)
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Selected Date: ${date.value}",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+
+                Button(
+                    onClick = { mTimePickerDialog.show() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary.copy(0.6f)),
+                    modifier = Modifier.height(55.dp)
+                ) {
+                    Text(text = "Open Time Picker", color = MaterialTheme.colors.onPrimary)
+                }
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                Text(text = "Selected Time: ${time.value}", fontSize = 13.sp)
+
+                /*Row(horizontalArrangement = Arrangement.SpaceEvenly) {
 
                     OutlinedTextField(
                         value = date.value,
@@ -127,7 +192,7 @@ fun EditReminder(
                         modifier = Modifier.width(180.dp)
                     )
 
-                }
+                }*/
 
                 Spacer(modifier = Modifier.height(20.dp))
                 if (latlng == null) {
@@ -148,7 +213,7 @@ fun EditReminder(
                     onClick = {
                         coroutineScope.launch {
 
-                            viewModel.updateReminder(
+                            viewModel.updateReminderAndNotify(
                                 Reminder(
                                     reminderId = reminder.reminderId,
                                     message = message.value,
@@ -158,10 +223,10 @@ fun EditReminder(
                                     locationY = when{
                                         latlng?.longitude != null -> {latlng.latitude}
                                         else -> reminder.locationY},
-                                    reminderTime = getReminderTime(),
+                                    reminderTime = mCalendar.timeInMillis,
                                     creationTime = reminder.creationTime,
-                                    creatorId = 1,
-                                    reminderSeen = false
+                                    creatorId = reminder.creatorId,
+                                    reminderSeen = reminder.reminderSeen
                                             )
 
                             )
@@ -169,7 +234,9 @@ fun EditReminder(
                         }
                         onBackPress()
                     },
-                    modifier = Modifier.fillMaxWidth().size(55.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(55.dp)
                 ) {
                     Text("Update reminder")
                 }
